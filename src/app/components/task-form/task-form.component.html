@@ -1,0 +1,38 @@
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label>Nombre de la tarea:</label>
+        <input pInputText formControlName="name" placeholder="Nombre de la tarea" />
+    </div>
+
+    <div>
+        <label>Fecha límite:</label>
+        <p-calendar formControlName="dueDate"></p-calendar>
+    </div>
+
+    <div formArrayName="persons">
+        <div *ngFor="let person of persons.controls; let i = index" [formGroupName]="i">
+            <label>Nombre Completo:</label>
+            <input pInputText formControlName="fullName" placeholder="Nombre completo" required minlength="5" />
+            <span *ngIf="person.get('fullName')?.hasError('duplicateName')">
+                Duplicate name! Please enter a unique name.
+            </span>
+
+            <label>Edad:</label>
+            <input pInputText type="number" formControlName="age" placeholder="Edad" />
+
+            <div formArrayName="skills">
+                <div *ngFor="let skill of getSkills(i).controls; let j = index">
+                    <label>Habilidad:</label>
+                    <input pInputText [formControlName]="j" placeholder="Habilidad" />
+                    <button pButton label="Eliminar Habilidad" (click)="removeSkill(i, j)" type="button"></button>
+                </div>
+                <button pButton label="Añadir Habilidad" (click)="addSkill(i)" type="button"></button>
+            </div>
+
+            <button pButton label="Eliminar Persona" (click)="removePerson(i)" type="button"></button>
+        </div>
+    </div>
+
+    <button pButton label="Añadir Persona" (click)="addPerson()" type="button"></button>
+    <button pButton label="Guardar Tarea" type="submit"></button>
+</form>
