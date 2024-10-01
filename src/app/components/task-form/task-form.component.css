@@ -1,0 +1,25 @@
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+p-calendar,
+p-button {
+    width: 100%;
+}
+
+.persons-container {
+    grid-column: span 2;
+}
+
+/* Estilos generales */
+form,
+.list-component {
+  margin: 20px;
+}

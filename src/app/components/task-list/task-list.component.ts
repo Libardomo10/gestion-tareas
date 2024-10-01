@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Task } from 'src/app/models/models';
+import { Skill, Task } from 'src/app/models/models';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
@@ -8,17 +8,46 @@ import { TaskService } from 'src/app/services/task.service';
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent {
+
   tasks: Task[] = [];
+  filteredTasks: Task[] = this.tasks;
+  currentFilter: string = 'all';
 
   constructor(private taskService: TaskService) {
     this.taskService.getTasks().subscribe(tasks => {
-      debugger
       this.tasks = tasks;
-      console.log('Lista de skills: ', this.tasks[0].persons[0].skills[0]);
+      this.filteredTasks = this.tasks;
+      this.applyFilter();
     });
   }
 
   toggleCompletion(index: number) {
+    console.log('Tasks', this.tasks);
+    console.log('filterTasks', this.filteredTasks);
+
     this.taskService.toggleTaskCompletion(index);
+    this.applyFilter();
+  }
+
+  joinSkills(listSkills: Skill[]) {
+    return listSkills.join(', ');
+  }
+
+  filterTasks(status: string) {
+    if (status === 'all') {
+      this.filteredTasks = this.tasks;
+    } else {
+      this.filteredTasks = this.tasks.filter(task => task.completed === (status === 'completed'));
+    }
+  }
+
+  applyFilter() {
+    if (this.currentFilter === 'all') {
+      this.filteredTasks = this.tasks;
+    } else if (this.currentFilter === 'completed') {
+      this.filteredTasks = this.tasks.filter(task => task.completed);
+    } else {
+      this.filteredTasks = this.tasks.filter(task => !task.completed);
+    }
   }
 }

@@ -1,38 +1,83 @@
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
-    <div>
-        <label>Nombre de la tarea:</label>
-        <input pInputText formControlName="name" placeholder="Nombre de la tarea" />
-    </div>
-
-    <div>
-        <label>Fecha límite:</label>
-        <p-calendar formControlName="dueDate"></p-calendar>
-    </div>
-
-    <div formArrayName="persons">
-        <div *ngFor="let person of persons.controls; let i = index" [formGroupName]="i">
-            <label>Nombre Completo:</label>
-            <input pInputText formControlName="fullName" placeholder="Nombre completo" required minlength="5" />
-            <span *ngIf="person.get('fullName')?.hasError('duplicateName')">
-                Duplicate name! Please enter a unique name.
-            </span>
-
-            <label>Edad:</label>
-            <input pInputText type="number" formControlName="age" placeholder="Edad" />
-
-            <div formArrayName="skills">
-                <div *ngFor="let skill of getSkills(i).controls; let j = index">
-                    <label>Habilidad:</label>
-                    <input pInputText [formControlName]="j" placeholder="Habilidad" />
-                    <button pButton label="Eliminar Habilidad" (click)="removeSkill(i, j)" type="button"></button>
-                </div>
-                <button pButton label="Añadir Habilidad" (click)="addSkill(i)" type="button"></button>
+<p-card header="Formulario de tareas">
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+        <div class="card flex justify-content-center">
+            <div class="flex flex-column gap-2">
+                <label for="name">Nombre de la tarea:</label>
+                <input pInputText formControlName="name" placeholder="Nombre de la tarea" id="nameTask"
+                    aria-describedby="nameTask" />
             </div>
-
-            <button pButton label="Eliminar Persona" (click)="removePerson(i)" type="button"></button>
         </div>
-    </div>
 
-    <button pButton label="Añadir Persona" (click)="addPerson()" type="button"></button>
-    <button pButton label="Guardar Tarea" type="submit"></button>
-</form>
+        <div class="card flex justify-content-center">
+            <div class="flex flex-column gap-2">
+                <label for="dueDate">Fecha límite:</label>
+                <p-calendar formControlName="dueDate" placeholder="Fecha límite" id="dueDate"
+                    aria-describedby="dueDate" />
+            </div>
+        </div>
+
+        <div formArrayName="persons" class="persons-container">
+            <div *ngFor="let person of persons.controls; let i = index" [formGroupName]="i">
+
+                <div class="card flex justify-content-center">
+                    <div class="flex flex-column gap-2">
+                        <label for="fullName">Nombre Completo:</label>
+                        <input pInputText formControlName="fullName" placeholder="Nombre Completo" id="fullName"
+                            required minlength="5" aria-describedby="fullName" />
+                    </div>
+                </div>
+                <span *ngIf="person.get('fullName')?.hasError('duplicateName')">
+                    Nombre duplicado, por favor ingrese uno unico por tarea.
+                </span>
+
+                <div class="card flex justify-content-center">
+                    <div class="flex flex-column gap-2">
+                        <label for="age">Edad:</label>
+                        <input pInputText formControlName="age" placeholder="Edad" id="age" type="number"
+                            aria-describedby="age" />
+                    </div>
+                </div>
+
+                <div formArrayName="skills">
+                    <div *ngFor="let skill of getSkills(i).controls; let j = index">
+
+                        <div class="card flex justify-content-center">
+                            <div class="flex flex-column gap-2">
+                                <label for="skill">Habilidad:</label>
+                                <input pInputText [formControlName]="j" placeholder="Habilidad" id="skill"
+                                    aria-describedby="skill" />
+                                <p-button size="small" label="Eliminar Habilidad"
+                                    (click)="removeSkill(i, j)" type="button" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="flex gap-3 mt-1">
+                        <p-button size="small" label="Añadir Habilidad"
+                            (click)="addSkill(i)" type="button" />
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-1">
+                    <p-button size="small" severity="danger" label="Eliminar Persona" (click)="removePerson(i)"
+                        type="button" />
+                </div>
+            </div>
+        </div>
+        <div *ngIf="taskForm.errors?.['atLeastOneFieldRequired']">
+            Se requiere al menos una persona o habilidad.
+        </div>
+        <div class="flex gap-3 mt-1">
+            <p-button size="small" label="Añadir Persona" (click)="addPerson()"
+                type="button" />
+            <p-button size="small" label="Guardar Tarea" class="p-button-success"
+                type="submit" />
+        </div>
+    </form>
+</p-card>
+
+<p-card header="Tareas">
+    <div class="list-component">
+        <app-task-list></app-task-list>
+    </div>
+</p-card>

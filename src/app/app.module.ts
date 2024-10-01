@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { CardModule } from "primeng/card";
 import { InputTextModule } from "primeng/inputtext";
 import { CalendarModule } from "primeng/calendar";
 import { ButtonModule } from 'primeng/button';
@@ -30,6 +31,7 @@ import { AppRoutingModule } from './app-routing.module';
     CheckboxModule,
     CalendarModule,
     InputTextModule,
+    CardModule,
     ReactiveFormsModule
   ],
   providers: [TaskService],
